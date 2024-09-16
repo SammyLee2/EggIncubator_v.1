@@ -1,0 +1,10 @@
+21:01:46 **** Incremental Build of configuration Debug for project Maybe ****
+make -j9 all 
+arm-none-eabi-size  Maybe.elf 
+   text	   data	    bss	    dec	    hex	filename
+  25296	    100	   3292	  28688	   7010	Maybe.elf
+Finished building: default.size.stdout
+ 
+
+21:01:46 Build Finished. 0 errors, 0 warnings. (took 284ms)
+
