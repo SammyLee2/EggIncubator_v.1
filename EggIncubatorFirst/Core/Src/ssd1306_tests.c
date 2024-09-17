@@ -5,6 +5,7 @@
 #include "ssd1306.h"
 #include "ssd1306_tests.h"
 #include "ssd1306_fonts.h"
+#include "global_vars.h"
 
 
 time_info_egg_incubator incubator_info;
@@ -856,6 +857,11 @@ void calculate_time(uint32_t *startTime) {
     if (*startTime == 1814402) {
     	elapsed_seconds = 1814400;
     }
+    //if the elapsed_seconds reaches 21days, change status to completed.
+    if(elapsed_seconds == 1814400){
+    	global_var_control = 2;
+    	return;
+    }
 
 
     uint32_t days_elapsed = elapsed_seconds / (60 * 60 * 24);
@@ -877,6 +883,7 @@ void calculate_time(uint32_t *startTime) {
     // Progress Calculation
     uint32_t progress_percent = (elapsed_seconds * 100)/ total_seconds;
     incubator_info.progress = progress_percent;
+
 
 }
 

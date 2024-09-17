@@ -1,4 +1,3 @@
-
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
@@ -102,6 +101,7 @@ int main(void)
   //0~1814400 is reserved since 21 x 24 x 60 x 60 is 181440
   uint32_t time_Preparing =1814401;
   uint32_t startTime = HAL_GetTick()/1000;
+
   uint32_t time_completed = 1814402;
 
 
@@ -122,10 +122,9 @@ int main(void)
   MX_TIM1_Init();
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
-
+  Ds18b20_Init_one_device();
   ssd1306_egg_incubator_booting();
   lcd_init(&hspi1);
-  Ds18b20_Init_one_device();
   HAL_TIM_Base_Start_IT(&htim1);
 
 
@@ -136,7 +135,6 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
       switch (global_var_control) {
           case PREPARING:
               //Tasks to perform in Preparing state
@@ -155,13 +153,13 @@ int main(void)
         	  temperature = my_ds18b20_Sensor.Temperature;
 
         	  if(heater_state){
-        		  if(temperature >40){
+        		  if(temperature >38){
         			  //turn the heater off
         			  HAL_GPIO_WritePin(GPIO_RELAY_GPIO_Port, GPIO_RELAY_Pin, 0);
         			  heater_state = 0;
         		  }
         	  }else{
-        		  if(temperature<40){
+        		  if(temperature<38){
         			  //turn the heater on
         			  HAL_GPIO_WritePin(GPIO_RELAY_GPIO_Port, GPIO_RELAY_Pin, 1);
         			  heater_state = 1;
@@ -193,7 +191,6 @@ int main(void)
 
   /* USER CODE END 3 */
 }
-
 
 /**
   * @brief System Clock Configuration
@@ -425,7 +422,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : GPIO_Control_Switch_Pin */
   GPIO_InitStruct.Pin = GPIO_Control_Switch_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIO_Control_Switch_GPIO_Port, &GPIO_InitStruct);
 

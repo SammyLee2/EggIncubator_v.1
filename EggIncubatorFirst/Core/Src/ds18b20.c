@@ -66,6 +66,7 @@ bool	Ds18b20_Init_one_device(void)
 		OneWire_Init(&OneWire,_DS18B20_GPIO ,_DS18B20_PIN);
 		if(!OneWire_First(&OneWire)){
 			return false;
+
 		}
 
 		OneWire_GetFullROM(&OneWire, my_ds18b20_Sensor.Address);

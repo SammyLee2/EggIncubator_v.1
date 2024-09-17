@@ -47,6 +47,9 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
+static uint32_t m_button_before_time = 0;
+
+
 
 /* USER CODE END PV */
 
@@ -215,25 +218,38 @@ void EXTI2_IRQHandler(void)
   HAL_GPIO_EXTI_IRQHandler(GPIO_Control_Switch_Pin);
   /* USER CODE BEGIN EXTI2_IRQn 1 */
 
-  global_var_control = (global_var_control+1) %3;
+ if(!(HAL_GPIO_ReadPin(GPIO_RELAY_GPIO_Port, GPIO_RELAY_Pin))){
+	if((HAL_GetTick() - m_button_before_time) > 200){
 
-  switch (global_var_control) {
-	case 0:
-		  ssd1306_Preparig_transition();
-		break;
+		  global_var_control = (global_var_control+1) %3;
 
-	case 1:
-		  ssd1306_Incubating_transition();
-		break;
+		  switch (global_var_control) {
+			case 0:
+				  ssd1306_Preparig_transition();
+				break;
 
-	case 2:
-		ssd1306_Completing_transition();
-		break;
+			case 1:
+				  ssd1306_Incubating_transition();
+				break;
 
-	default:
-		break;
 
-}
+			case 2:
+				ssd1306_Completing_transition();
+				break;
+
+			default:
+				break;
+
+		}
+		  m_button_before_time = HAL_GetTick();
+
+	}
+
+ }
+
+
+
+
 
   /* USER CODE END EXTI2_IRQn 1 */
 }
